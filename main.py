@@ -1,4 +1,3 @@
-# Tech with Tim
 import nltk  # Natural Language Tool Kit
 from nltk.stem.lancaster import LancasterStemmer
 
@@ -6,7 +5,6 @@ stemmer = LancasterStemmer()
 
 import numpy
 import tensorflow
-# import tflearn
 from tensorflow import keras
 import random
 import json
@@ -61,21 +59,11 @@ except:
         training.append(bag)
         output.append(output_row)
 
-    training = numpy.array(training)  # For working with tflearn we need arrays
+    training = numpy.array(training)
     output = numpy.array(output)
 
     with open("data.pickle", "wb") as f:
         pickle.dump((words, labels, training, output), f)
-
-# tensorflow.reset_default_graph()  # Clears the default graph data and resets the global default graph
-#
-# net = tflearn.input_data(shape=[None, len(training[0])])  # Set the length of input data which will be the same throughout
-# net = tflearn.fully_connected(net, 8)
-# net = tflearn.fully_connected(net, 8)
-# net = tflearn.fully_connected(net, len(output[0]), activation="softmax")
-# net = tflearn.regression(net)
-#
-# model = tflearn.DNN(net)
 
 
 model = keras.Sequential()
@@ -88,12 +76,9 @@ model.compile(optimizer="adam", loss="mean_squared_error")
 
 
 try:
-    # model.load("model.tflearn")
     model.load("model.h5")
 except:
-    # model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
     model.fit(training, output, epochs=1000, batch_size=8)
-    # model.save("model.tflearn")
     model.save("model.h5")
 
 
@@ -130,33 +115,3 @@ def chat():
 
 
 chat()
-
-# # My version
-# import nltk  
-# from nltk.stem.lancaster import LancasterStemmer
-# import json
-
-# stemmer = LancasterStemmer()
-
-# with open("intents.json") as file:
-# 	data = json.load(file)
-
-# docs_x = []  
-# docs_y = []  
-# words = []  
-# labels = []
-
-# for intent in data["intents"]:
-# 	for pattern in intent["patterns"]:
-# 		docs_x.append(pattern)
-# 		w = nltk.word_tokenize(pattern)  
-# 		words.extend(w)  
-
-# 	if intent["tag"] not in labels: 	
-# 		labels.append(intent["tag"])
-
-# words = [stemmer.stem(w.lower()) for w in words]
-# print(type(words))
-# words = sorted(list(words))
-
-# labels = sorted(labels)
